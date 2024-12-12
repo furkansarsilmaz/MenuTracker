@@ -6,20 +6,25 @@ class App:
         self.root = root
         self.root.title("App")
         self.root.geometry("300x300")
+        self.root.configure(background="lightblue")
         self.menu = {
             "Kebab": 0 ,
             "Doner": 0,
-            "Baklava":0
+            "Baklava":0,
+            "Turkish coffee":0
         }
         self.main_menu()
 
     def main_menu(self):
         self.clear_screen()
-        self.buttonOrder = Button(self.root,text="Order",command=self.getOrder)
-        self.buttonOrder.grid(row=0,column=1)
+        self.buttonOrder = Button(self.root,text="Order",width=5,font=("arial",12,"italic"),command=self.getOrder)
+        self.buttonOrder.grid(row=0,column=1,padx=110,pady=10)
 
-        self.buttonExit = Button(self.root,text="Exit",command= self.exit_App)
-        self.buttonExit.grid(row=1,column=1)
+        self.buttonExit = Button(self.root,text="Exit",width=5,font=("arial",12,"italic"),command= self.exit_App)
+        self.buttonExit.grid(row=1,column=1,padx=100,pady=10)
+
+        self.buttonSave = Button(self.root,text="Save",width=5,font=("arial",12,"italic"))
+        self.buttonSave.grid(row=2,column=1,padx=100,pady=10)
 
     def exit_App(self):
         if messagebox.askyesno("Exit","Do you want to exit ?"):
@@ -47,7 +52,7 @@ class App:
             row_num += 1
 
         backButton = Button(self.root,text="Back",command=self.main_menu)
-        backButton.grid(row=3,column=2)
+        backButton.grid(row=4,column=2)
 
     def minus_quantity(self,item):
         if self.menu[item] <= 0 :
@@ -56,12 +61,9 @@ class App:
             self.menu[item] -= 1
         self.getOrder()
 
-
     def plus_quantity(self,item):
         self.menu[item] += 1
         self.getOrder()
-
-
 
     def clear_screen(self):
         for i in self.root.winfo_children():
