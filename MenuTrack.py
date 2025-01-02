@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import messagebox 
 import sys
 import csv 
+
 class App:
     def __init__(self,root):
         self.root = root
@@ -18,7 +19,7 @@ class App:
 
     def main_menu(self):
         self.clear_screen()
-        self.buttonOrder = Button(self.root,text="Order",width=5,font=("arial",12,"italic"),command= self.getOrder)
+        self.buttonOrder = Button(self.root,text="Order",width=5,font=("arial",12,"italic"),command= self.getTable)
         self.buttonOrder.grid(row=0,column=1,padx=110,pady=10)
 
         self.buttonExit = Button(self.root,text="Exit",width=5,font=("arial",12,"italic"),command= self.exit_App)
@@ -27,19 +28,19 @@ class App:
         self.buttonSave = Button(self.root,text="Save",width=5,font=("arial",12,"italic"),command= self.saveDay)
         self.buttonSave.grid(row=2,column=1,padx=100,pady=10)
 
-    def saveDay(self):
-        with open("orders.csv","w",newline="") as csvfile :
-            Writer = csv.writer(csvfile)
-            Writer.writerow(["Order","Quantity"])
-            for item,quantity in self.menu.items():
-                Writer.writerow([item,quantity])
-        messagebox.showinfo("Succeed","Orders saved")
+    def getTable(self):
+        self.clear_screen()
+        row_num = 0
+        column_num = 0 
+        table_num = ""
+        for i in range(10):
+            Button(self.root,text=i,width=4,height=3).grid(row=row_num,column=column_num,padx=30,pady=20)
+            column_num += 1 
+            if column_num == 3 :
+                row_num += 1 
+                column_num = 0 
 
-    def exit_App(self):
-        if messagebox.askyesno("Exit","Do you want to exit ?"):
-            sys.exit()
 
-    
     def getOrder(self):
         """
         Clears the screen and creates a new one with loop.
@@ -63,6 +64,14 @@ class App:
         backButton = Button(self.root,text="Back",command=self.main_menu)
         backButton.grid(row=4,column=2)
 
+    def saveDay(self):
+        with open("orders.csv","w",newline="") as csvfile :
+            Writer = csv.writer(csvfile)
+            Writer.writerow(["Order","Quantity"])
+            for item,quantity in self.menu.items():
+                Writer.writerow([item,quantity])
+        messagebox.showinfo("Succeed","Orders saved")
+
     def minus_quantity(self,item):
         if self.menu[item] <= 0 :
             pass
@@ -78,6 +87,9 @@ class App:
         for i in self.root.winfo_children():
             i.destroy()
 
+    def exit_App(self):
+        if messagebox.askyesno("Exit","Do you want to exit ?"):
+            sys.exit()
 
 if __name__ == "__main__":
     root = Tk()
