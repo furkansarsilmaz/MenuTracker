@@ -34,14 +34,15 @@ class App:
         column_num = 0 
         table_num = ""
         for i in range(10):
-            Button(self.root,text=i,width=4,height=3).grid(row=row_num,column=column_num,padx=30,pady=20)
+            Button(self.root,text=i,width=4,height=3,
+            command= lambda i=i : self.getOrder(i)).grid(row=row_num,column=column_num,padx=30,pady=20)
             column_num += 1 
             if column_num == 3 :
                 row_num += 1 
                 column_num = 0 
 
 
-    def getOrder(self):
+    def getOrder(self,table):
         """
         Clears the screen and creates a new one with loop.
         """
@@ -55,14 +56,16 @@ class App:
             Label(self.root,text=self.menu[i]).grid(row= row_num , column= 1)
             
             # Increase Quantity
-            Button(self.root,text="+",width=2,command = lambda i=i : self.plus_quantity(i)).grid(row= row_num , column= 2,padx=10)
+            Button(self.root,text="+",width=2,command = lambda i=i : self.plus_quantity(i,table)).grid(row= row_num , column= 2,padx=10)
             
             # Decrease Quantity
-            Button(self.root,text="-",width=2,command=lambda i=i : self.minus_quantity(i)).grid(row=row_num,column= 3,padx=10)
+            Button(self.root,text="-",width=2,command=lambda i=i : self.minus_quantity(i,table)).grid(row=row_num,column= 3,padx=10)
             row_num += 1
-
+        
+        table_num = Label(self.root,text="Table number :"+str(table))
+        table_num.grid(row=4,column=2,pady=10)
         backButton = Button(self.root,text="Back",command=self.main_menu)
-        backButton.grid(row=4,column=2)
+        backButton.grid(row=5,column=2,pady=10)
 
     def saveDay(self):
         with open("orders.csv","w",newline="") as csvfile :
@@ -72,16 +75,16 @@ class App:
                 Writer.writerow([item,quantity])
         messagebox.showinfo("Succeed","Orders saved")
 
-    def minus_quantity(self,item):
+    def minus_quantity(self,item,table):
         if self.menu[item] <= 0 :
             pass
         else:
             self.menu[item] -= 1
-        self.getOrder()
+        self.getOrder(table)
 
-    def plus_quantity(self,item):
+    def plus_quantity(self,item,table):
         self.menu[item] += 1
-        self.getOrder()
+        self.getOrder(table)
 
     def clear_screen(self):
         for i in self.root.winfo_children():
